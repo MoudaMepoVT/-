@@ -1,15 +1,18 @@
 
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>妄堕めぽのお部屋</title>
 
+
 <style>
 body {
   background: #ccffff;
   text-align: center;
 }
+
 
 /* LIVE点滅 */
 .live {
@@ -20,6 +23,7 @@ body {
 @keyframes blink {
   50% { opacity: 0; }
 }
+
 
 /* キラキラ背景 */
 .star {
@@ -37,7 +41,9 @@ body {
 </style>
 </head>
 
+
 <body>
+
 
 <!-- 🌟 背景 -->
 <script>
@@ -50,16 +56,19 @@ for (let i = 0; i < 40; i++) {
 }
 </script>
 
+
 <!-- 🎥 タイトル -->
 <h1>
-<a href="https://www.youtube.com/" target="_blank">
+<a href="https://www.youtube.com/@%E5%A6%84%E5%A0%95%E3%82%81%E3%81%BD-MoudaMepo/" target="_blank">
 ★⊂( ᴖ ̫ ᴖ )⊃めぽのホームページ⊂( ᴖ ̫ ᴖ )⊃★
 </a>
 </h1>
 
+
 <!-- 🔢 カウンター -->
 <p>あなたは <span id="counter">0</span> 人目！</p>
 <p id="kiri"></p>
+
 
 <script>
 let count = localStorage.getItem("count") || 0;
@@ -67,28 +76,36 @@ count++;
 localStorage.setItem("count", count);
 document.getElementById("counter").textContent = count;
 
+
 if (count == 8888) {
   document.getElementById("kiri").innerHTML = "🎉キリ番8888！報告してね！";
 }
 </script>
 
+
 <hr>
+
 
 <!-- 🔴 配信 -->
 <h2>★配信情報★</h2>
 
+
 <h3>🔴 LIVE中</h3>
 <div id="live"></div>
+
 
 <h3>⏰ 配信予定</h3>
 <div id="upcoming"></div>
 
+
 <h3>📼 アーカイブ</h3>
 <div id="archive"></div>
+
 
 <script>
 const API_KEY = "AIzaSyDQq60pEFFz8KhlaF-GqIebY9C069qaT1s";
 const CHANNEL_ID = "UCmUlzug_w0WqRdTsEMJHjFw";
+
 
 async function loadYT(type, target) {
   const res = await fetch(
@@ -96,7 +113,9 @@ async function loadYT(type, target) {
   );
   const data = await res.json();
 
+
   let html = "";
+
 
   if (!data.items || data.items.length === 0) {
     html = "<p>なし</p>";
@@ -105,6 +124,7 @@ async function loadYT(type, target) {
       const title = item.snippet.title;
       const thumb = item.snippet.thumbnails.medium.url;
       const videoId = item.id.videoId;
+
 
       html += `
         <div>
@@ -120,20 +140,25 @@ async function loadYT(type, target) {
     });
   }
 
+
   document.getElementById(target).innerHTML = html;
 }
+
 
 loadYT("live", "live");
 loadYT("upcoming", "upcoming");
 loadYT("completed", "archive");
 </script>
 
+
 <hr>
+
 
 <!-- 🎮 おみくじ -->
 <h2>★おみくじ★</h2>
 <button onclick="omikuji()">引く</button>
 <p id="omikujiResult"></p>
+
 
 <script>
 function omikuji() {
@@ -143,12 +168,15 @@ function omikuji() {
 }
 </script>
 
+
 <hr>
+
 
 <!-- 🎮 連打 -->
 <h2>★応援ボタン★</h2>
 <button onclick="tap()">ぽち！</button>
 <p>応援：<span id="score">0</span></p>
+
 
 <script>
 let score = 0;
@@ -158,20 +186,26 @@ function tap() {
 }
 </script>
 
+
 <hr>
+
 
   <!-- 💬 掲示板 -->
 <h2>★掲示板★</h2>
+
 
 <input id="name" placeholder="名前"><br>
 <textarea id="msg" placeholder="メッセージ"></textarea><br>
 <button onclick="postMsg()">書き込む</button>
 
+
 <div id="bbsArea"></div>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJNWWipkTzo_CoWjCrJJG0rAXK_rfU9_c",
@@ -183,15 +217,19 @@ const firebaseConfig = {
   measurementId: "G-SL2D9GDZBD"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 
 // 📩 投稿
 window.postMsg = async function() {
   const name = document.getElementById("name").value;
   const msg = document.getElementById("msg").value;
 
+
   if (!name || !msg) return alert("入力してね！");
+
 
   await addDoc(collection(db, "bbs"), {
     name: name,
@@ -199,16 +237,20 @@ window.postMsg = async function() {
     time: new Date()
   });
 
+
   document.getElementById("msg").value = ""; // 入力リセット
   loadMessages();
 }
+
 
 // 📖 読み込み
 async function loadMessages() {
   const q = query(collection(db, "bbs"), orderBy("time", "desc"));
   const snapshot = await getDocs(q);
 
+
   let html = "";
+
 
   snapshot.forEach(doc => {
     const d = doc.data();
@@ -220,19 +262,22 @@ async function loadMessages() {
     `;
   });
 
+
   document.getElementById("bbsArea").innerHTML = html;
 }
+
 
 // 初期読み込み
 loadMessages();
 </script>
 
-<hr>
+
+
 
 <hr>
 
-  
-<hr>
+
+
 
 <!-- 🦷キャラ🌧️-->
 <h2>★キャラ紹介★</h2>
@@ -258,7 +303,10 @@ loadMessages();
 </a> </p>
 
 
+
+
 <hr>
+
 
 <!-- 🔗 リンク -->
 <h2>★リンク★</h2>
@@ -270,7 +318,11 @@ loadMessages();
 </html>
 
 
+
+
 <hr>
+
+
 
 
 <!-- 🔗 リンク -->
@@ -283,6 +335,9 @@ loadMessages();
 </html>
 
 
+
+
 <hr>
+
 
 <hr>
